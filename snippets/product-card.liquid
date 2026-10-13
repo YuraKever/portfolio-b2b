@@ -1,0 +1,114 @@
+{% doc %}
+  Renders a product tile for grids: image, vendor, title and price.
+
+  @param {product} product - The product to render
+
+  @example
+  {% render 'product-card', product: product %}
+{% enddoc %}
+
+<a class="product-card" href="{{ product.url }}">
+  <div class="product-card__media">
+    {% if product.featured_image %}
+      {{
+        product.featured_image
+        | image_url: width: 800, height: 800, crop: 'center'
+        | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 25vw, 50vw', widths: '300, 500, 800'
+      }}
+    {% else %}
+      {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder' }}
+    {% endif %}
+    {% unless product.available %}
+      <span class="product-card__badge">{{ 'products.sold_out' | t }}</span>
+    {% endunless %}
+  </div>
+
+  <div class="product-card__info">
+    {% if product.vendor != blank %}
+      <p class="product-card__vendor">{{ product.vendor }}</p>
+    {% endif %}
+    <h3 class="product-card__title">{{ product.title }}</h3>
+    <p class="product-card__price">
+      {% if product.price_varies %}
+        {% assign price_min = product.price_min | money %}
+        {{ 'products.price_from' | t: price: price_min }}
+      {% else %}
+        {{ product.price | money }}
+      {% endif %}
+    </p>
+  </div>
+</a>
+
+{% stylesheet %}
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+    color: inherit;
+    text-decoration: none;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .product-card:hover {
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+  }
+
+  .product-card__media {
+    position: relative;
+    aspect-ratio: 1;
+    background: color-mix(in srgb, var(--color-foreground) 4%, var(--color-background));
+  }
+
+  .product-card__media img,
+  .product-card__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+
+  .product-card:hover .product-card__media img {
+    transform: scale(1.03);
+  }
+
+  .product-card__badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 999px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .product-card__info {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1rem 1.125rem 1.25rem;
+  }
+
+  .product-card__vendor {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .product-card__title {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .product-card__price {
+    font-weight: 500;
+    color: var(--color-accent);
+  }
+{% endstylesheet %}

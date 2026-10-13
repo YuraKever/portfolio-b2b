@@ -1,0 +1,122 @@
+<footer class="footer full-width">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <a class="footer__logo" href="{{ routes.root_url }}">{{ shop.name }}</a>
+      {% if section.settings.text != blank %}
+        <p class="muted">{{ section.settings.text }}</p>
+      {% endif %}
+    </div>
+
+    {% if section.settings.menu.links.size > 0 %}
+      <nav class="footer__links" aria-label="{{ 'footer.menu' | t }}">
+        {% for link in section.settings.menu.links %}
+          {{ link.title | link_to: link.url }}
+        {% endfor %}
+      </nav>
+    {% endif %}
+  </div>
+
+  <div class="footer__bottom">
+    <p class="muted">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }} · {{ powered_by_link }}</p>
+    {% if section.settings.show_payment_icons %}
+      <div class="footer__payment">
+        {% for type in shop.enabled_payment_types %}
+          {{ type | payment_type_svg_tag }}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</footer>
+
+{% stylesheet %}
+  .footer {
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    font-size: 0.9375rem;
+  }
+
+  .footer__inner,
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+    width: var(--content-width);
+    margin-inline: auto;
+  }
+
+  .footer__inner {
+    padding-block: 3rem 2rem;
+  }
+
+  .footer__brand {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 24rem;
+  }
+
+  .footer__logo {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+
+  .footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+  }
+
+  .footer__links a,
+  .footer__bottom a {
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+
+  .footer__links a:hover {
+    color: var(--color-foreground);
+  }
+
+  .footer__bottom {
+    align-items: center;
+    padding-block: 1.25rem 2rem;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.8125rem;
+  }
+
+  .footer__payment {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .footer__payment svg {
+    width: 2.25rem;
+    height: auto;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "t:labels.text",
+      "default": "Wholesale coffee and café supplies for businesses. Net terms and volume pricing for approved accounts."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:labels.menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "t:labels.show_payment_icons",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

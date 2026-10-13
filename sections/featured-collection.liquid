@@ -1,0 +1,55 @@
+{% liquid
+  assign featured = section.settings.collection
+  if featured == blank
+    assign featured = collections.all
+  endif
+%}
+
+<div class="featured-collection">
+  <div class="featured-collection__header">
+    <div>
+      {% if section.settings.eyebrow != blank %}
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+      <h2>{{ section.settings.title | default: featured.title }}</h2>
+    </div>
+    <a class="button button--secondary" href="{{ featured.url }}">{{ 'collections.view_all' | t }}</a>
+  </div>
+
+  <ul class="product-grid">
+    {% for product in featured.products limit: section.settings.limit %}
+      <li>{% render 'product-card', product: product %}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% stylesheet %}
+  .featured-collection {
+    padding-block-start: var(--space-section);
+  }
+
+  .featured-collection__header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-block-end: 1.75rem;
+  }
+
+  .featured-collection__header h2 {
+    margin-block: 0.25rem 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.featured_collection",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:labels.eyebrow", "default": "Catalog" },
+    { "type": "text", "id": "title", "label": "t:labels.heading", "default": "Popular with our partners" },
+    { "type": "collection", "id": "collection", "label": "t:labels.collection" },
+    { "type": "range", "id": "limit", "label": "t:labels.products_to_show", "min": 4, "max": 16, "step": 4, "default": 8 }
+  ],
+  "presets": [{ "name": "t:general.featured_collection" }]
+}
+{% endschema %}

@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "image": "shopify://shop_images/photo-1600093463592-8e36ae95ef56_aa4f0cca-488a-4656-9b50-5a59504fbfd7.jpg",
+        "button_link": "shopify://collections/wholesale-coffee"
+      }
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "wholesale-coffee"
+      }
+    }
+  },
+  "order": ["hero", "featured"]
+}

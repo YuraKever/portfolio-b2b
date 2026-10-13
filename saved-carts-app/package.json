@@ -1,0 +1,12 @@
+{
+  "name": "saved-carts-app",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --env-file=.env --watch server.js",
+    "start": "node server.js"
+  }
+}

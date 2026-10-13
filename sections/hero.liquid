@@ -1,0 +1,144 @@
+<div class="hero full-width">
+  <div class="hero__inner">
+    <div class="hero__content">
+      {% if section.settings.eyebrow != blank %}
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+      <h1 class="hero__title">{{ section.settings.title }}</h1>
+      {% if section.settings.text != blank %}
+        <div class="hero__text">{{ section.settings.text }}</div>
+      {% endif %}
+      <div class="hero__actions">
+        {% if section.settings.button_label != blank %}
+          <a class="button" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">
+            {{- section.settings.button_label -}}
+          </a>
+        {% endif %}
+        {% unless customer %}
+          <a class="button button--secondary" href="{{ routes.account_login_url }}">{{ 'hero.login' | t }}</a>
+        {% endunless %}
+      </div>
+
+      <ul class="hero__perks">
+        {% for i in (1..3) %}
+          {% assign perk_key = 'perk_' | append: i %}
+          {% if section.settings[perk_key] != blank %}
+            <li>{{ section.settings[perk_key] }}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="hero__media">
+      {% if section.settings.image %}
+        {{
+          section.settings.image
+          | image_url: width: 1400
+          | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 990px) 50vw, 100vw'
+        }}
+      {% else %}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'hero__placeholder' }}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .hero {
+    background:
+      radial-gradient(60rem 30rem at 85% -10%, var(--color-accent-soft), transparent 70%),
+      var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4rem);
+    width: var(--content-width);
+    margin-inline: auto;
+    padding-block: var(--space-section);
+  }
+
+  .hero__title {
+    margin-block: 0.75rem 1.25rem;
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+  }
+
+  .hero__text {
+    max-width: 34rem;
+    font-size: 1.125rem;
+    color: var(--color-muted);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-block: 2rem;
+  }
+
+  .hero__perks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .hero__perks li::before {
+    content: '✓';
+    margin-inline-end: 0.5rem;
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  .hero__media {
+    overflow: hidden;
+    aspect-ratio: 4 / 3.4;
+    border-radius: calc(var(--radius-card) * 1.5);
+    box-shadow: var(--shadow-card);
+    background: var(--color-surface);
+  }
+
+  .hero__media img,
+  .hero__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 989px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:labels.eyebrow", "default": "Wholesale for cafés & offices" },
+    { "type": "text", "id": "title", "label": "t:labels.heading", "default": "Specialty coffee supply, ordered the way your business works" },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:labels.text",
+      "default": "<p>Volume pricing, saved carts for repeat orders and net terms for approved business accounts.</p>"
+    },
+    { "type": "text", "id": "button_label", "label": "t:labels.button_label", "default": "Browse catalog" },
+    { "type": "url", "id": "button_link", "label": "t:labels.button_link" },
+    { "type": "image_picker", "id": "image", "label": "t:labels.image" },
+    { "type": "text", "id": "perk_1", "label": "t:labels.perk", "default": "Saved carts for reorders" },
+    { "type": "text", "id": "perk_2", "label": "t:labels.perk", "default": "Company pricing" },
+    { "type": "text", "id": "perk_3", "label": "t:labels.perk", "default": "Ships in 48 hours" }
+  ],
+  "presets": [{ "name": "t:general.hero" }]
+}
+{% endschema %}

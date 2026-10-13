@@ -1,0 +1,126 @@
+{
+  "404": {
+    "title": "404",
+    "not_found": "Page not found.",
+    "back_to_shopping": "Back to shopping"
+  },
+  "blog": {
+    "article_comments": "Comments",
+    "article_metadata_html": "{{ date }} by {{ author }}",
+    "comment_form_body": "Comment",
+    "comment_form_email": "Email",
+    "comment_form_name": "Name",
+    "comment_form_submit": "Post",
+    "comment_form_title": "Add a comment"
+  },
+  "cart": {
+    "checkout": "Checkout",
+    "title": "Cart",
+    "update": "Update",
+    "remove": "Remove",
+    "empty": "Your cart is empty.",
+    "continue_shopping": "Browse catalog",
+    "quantity_for": "Quantity for {{ title }}",
+    "subtotal": "Subtotal",
+    "taxes_note": "Taxes and shipping are calculated at checkout.",
+    "save_for_later": "Save this cart for later →"
+  },
+  "customers": {
+    "login": {
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "title": "Login"
+    }
+  },
+  "collections": {
+    "title": "Collections",
+    "view_all": "View all",
+    "sort_by": "Sort by",
+    "apply": "Apply",
+    "empty": "No products in this collection yet.",
+    "pagination": "Pagination",
+    "product_count": {
+      "one": "{{ count }} product",
+      "other": "{{ count }} products"
+    }
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "Add to Apple Wallet",
+    "card": "Gift card",
+    "expired": "This gift card has expired",
+    "expires_on": "Expires on {{ expires_on }}",
+    "use_at_checkout": "Use this gift card at checkout"
+  },
+  "password": {
+    "title": "This shop is private",
+    "password": "Password",
+    "enter": "Enter"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search articles, pages, or products",
+    "submit": "Search",
+    "no_results_html": "No results found for {{ terms }}",
+    "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "saved_carts": {
+    "title": "Saved carts",
+    "current_cart": "Current cart",
+    "current_cart_empty": "Your cart is empty. Add products to save a cart.",
+    "name_label": "Cart name",
+    "save": "Save cart",
+    "loading": "Loading saved carts…",
+    "empty": "You have no saved carts yet.",
+    "updated_at": "Updated {{ date }}",
+    "checkout": "Checkout",
+    "restore": "Load into cart",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save_changes": "Save changes",
+    "cancel": "Cancel",
+    "dismiss": "Dismiss notification",
+    "quantity": "Quantity",
+    "remove_item": "Remove",
+    "saved": "Cart saved.",
+    "updated": "Cart updated.",
+    "deleted": "Cart deleted.",
+    "delete_confirm": "Delete this saved cart?",
+    "restore_confirm": "This will replace the items in your current cart. Continue?",
+    "empty_items": "A saved cart needs at least one item. Delete the cart instead.",
+    "restore_adjusted": "Some quantities were reduced to what is available:",
+    "restore_adjusted_line": "{{ title }}: {{ requested }} requested, {{ added }} added",
+    "restore_error": "None of the items could be added. They may be unavailable. Your cart was not changed.",
+    "conflict": "Your saved carts were changed on another device. The list has been refreshed, please try again.",
+    "error": "Something went wrong. Please try again.",
+    "login_required": "Log in to see your saved carts.",
+    "b2b_only": "Saved carts are available for business accounts only.",
+    "eyebrow": "Business account",
+    "login": "Log in"
+  },
+  "header": {
+    "menu": "Main menu",
+    "saved_carts": "Saved carts",
+    "account": "Account",
+    "cart": {
+      "one": "Cart, {{ count }} item",
+      "other": "Cart, {{ count }} items"
+    }
+  },
+  "hero": {
+    "login": "Business login"
+  },
+  "footer": {
+    "menu": "Footer menu"
+  },
+  "products": {
+    "home": "Home",
+    "breadcrumbs": "Breadcrumbs",
+    "sold_out": "Sold out",
+    "price_from": "From {{ price }}",
+    "quantity": "Quantity",
+    "add_to_cart": "Add to cart",
+    "minimum_quantity": "Minimum order: {{ count }} units",
+    "volume_price": "{{ count }}+ units: {{ price }} each"
+  }
+}

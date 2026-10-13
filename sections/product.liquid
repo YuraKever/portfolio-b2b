@@ -1,0 +1,231 @@
+{% comment %}
+  This section is used in the product template to render product page with
+  media, content, and add-to-cart form.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
+{% endcomment %}
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<nav class="breadcrumbs" aria-label="{{ 'products.breadcrumbs' | t }}">
+  <a href="{{ routes.root_url }}">{{ 'products.home' | t }}</a>
+  <span aria-hidden="true">/</span>
+  {% if collection %}
+    <a href="{{ collection.url }}">{{ collection.title }}</a>
+    <span aria-hidden="true">/</span>
+  {% endif %}
+  <span aria-current="page">{{ product.title }}</span>
+</nav>
+
+<div class="product">
+  <div class="product__media">
+    {% for media in product.media limit: 5 %}
+      {% liquid
+        assign loading = 'lazy'
+        if forloop.first
+          assign loading = 'eager'
+        endif
+      %}
+      <div class="product__image{% if forloop.first %} product__image--main{% endif %}">
+        {{
+          media.preview_image
+          | image_url: width: 1400
+          | image_tag: loading: loading, sizes: '(min-width: 990px) 55vw, 100vw'
+        }}
+      </div>
+    {% else %}
+      <div class="product__image product__image--main">
+        {{ 'product-1' | placeholder_svg_tag }}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="product__info">
+    {% if product.vendor != blank %}
+      <p class="eyebrow">{{ product.vendor }}</p>
+    {% endif %}
+    <h1 class="product__title">{{ product.title }}</h1>
+
+    <p class="product__price">
+      {{ current_variant.price | money }}
+      {% if current_variant.compare_at_price > current_variant.price %}
+        <s class="muted">{{ current_variant.compare_at_price | money }}</s>
+      {% endif %}
+    </p>
+
+    {% if current_variant.quantity_rule.min > 1 or current_variant.quantity_price_breaks.size > 0 %}
+      <div class="product__b2b card">
+        {% if current_variant.quantity_rule.min > 1 %}
+          <p>{{ 'products.minimum_quantity' | t: count: current_variant.quantity_rule.min }}</p>
+        {% endif %}
+        {% for price_break in current_variant.quantity_price_breaks %}
+          {% assign break_price = price_break.price | money %}
+          <p>{{ 'products.volume_price' | t: count: price_break.minimum_quantity, price: break_price }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% form 'product', product, class: 'product__form' %}
+      {% unless product.has_only_default_variant %}
+        <label for="ProductVariant">{{ product.options | join: ' / ' }}</label>
+        <select id="ProductVariant" name="id">
+          {% for variant in product.variants %}
+            <option
+              value="{{ variant.id }}"
+              {% if variant == current_variant %}
+                selected
+              {% endif %}
+              {% unless variant.available %}
+                disabled
+              {% endunless %}
+            >
+              {{ variant.title }} — {{ variant.price | money }}
+            </option>
+          {% endfor %}
+        </select>
+      {% else %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+      {% endunless %}
+
+      <div class="product__buy">
+        <label class="visually-hidden" for="ProductQuantity">{{ 'products.quantity' | t }}</label>
+        <input
+          id="ProductQuantity"
+          type="number"
+          name="quantity"
+          value="{{ current_variant.quantity_rule.min | default: 1 }}"
+          min="{{ current_variant.quantity_rule.min | default: 1 }}"
+          {% if current_variant.quantity_rule.max %}
+            max="{{ current_variant.quantity_rule.max }}"
+          {% endif %}
+          step="{{ current_variant.quantity_rule.increment | default: 1 }}"
+        >
+        <button type="submit" {% unless current_variant.available %}disabled{% endunless %}>
+          {% if current_variant.available %}
+            {{ 'products.add_to_cart' | t }}
+          {% else %}
+            {{ 'products.sold_out' | t }}
+          {% endif %}
+        </button>
+      </div>
+
+      {{ form | payment_button }}
+    {% endform %}
+
+    {% if product.description != blank %}
+      <div class="product__description">{{ product.description }}</div>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+
+  .breadcrumbs a {
+    color: inherit;
+  }
+
+  .product {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: start;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .product__media {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+
+  .product__image {
+    overflow: hidden;
+    aspect-ratio: 1;
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+
+  .product__image--main {
+    grid-column: 1 / -1;
+  }
+
+  .product__image img,
+  .product__image svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product__info {
+    position: sticky;
+    top: 6rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .product__title {
+    margin: 0;
+  }
+
+  .product__price {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  .product__b2b {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    font-size: 0.9375rem;
+    background: var(--color-accent-soft);
+    border-color: transparent;
+  }
+
+  .product__form {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .product__buy {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 0.75rem;
+  }
+
+  .product__description {
+    padding-block-start: 1.25rem;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-muted);
+  }
+
+
+  @media (max-width: 989px) {
+    .product {
+      grid-template-columns: 1fr;
+    }
+
+    .product__info {
+      position: static;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.product",
+  "settings": [],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

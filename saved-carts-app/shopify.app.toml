@@ -1,0 +1,29 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "f9ed2843b00bd4e0499a35ef0305acd5"
+name = "saved-carts-app"
+application_url = "https://saved-carts-app.vercel.app"
+embedded = false
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_customers,write_customers,read_companies"
+
+[app_proxy]
+url = "https://saved-carts-app.vercel.app/proxy"
+prefix = "apps"
+subpath = "saved-carts"
+
+[customer.metafields.app.saved_carts]
+name = "Saved carts"
+description = "B2B saved carts (JSON), written by the app proxy"
+type = "json"
+
+[webhooks]
+api_version = "2027-01"
+
+[auth]
+redirect_urls = [ "https://saved-carts-app.vercel.app/auth" ]
+
+[build]
+automatically_update_urls_on_dev = false
